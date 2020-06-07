@@ -1,15 +1,12 @@
 import React from 'react';
 import './App.css';
 import { tasks } from './tasks';
-import Task from './component/Task/Task';
+import Stage from './component/Stage/Stage'
 
 const App = () => {
-  const taskObjs = tasks.map((task) => {
-    return <Task taskName={task.name} />;
-  });
   return (
     <div className="App">
-      { taskObjs }
+      <Stage tasks={tasks} />
     </div>
   );
 }
