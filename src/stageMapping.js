@@ -1,5 +1,5 @@
 export const stageMapping = {
-    0: 'To do',
-    1: 'WIP',
-    2: 'Done'
+    1: 'To do',
+    2: 'WIP',
+    3: 'Done'
 };

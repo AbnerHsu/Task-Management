@@ -37,6 +37,10 @@
   }
 }
 
+.stage {
+  min-height: 400px;
+}
+
 .taskList {
   display: inline-block;
 }

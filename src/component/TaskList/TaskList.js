@@ -14,7 +14,7 @@ class TaskList extends Component
         return (
             <div className="taskList br3 v-top">
             { 
-                this.props.tasks.map((task) => <Task key={task.id} taskName={task.name} taskId={task.id} taskcontainer={this} />)
+                this.props.tasks.map((task) => <Task key={task.id} taskName={task.title} taskId={task.id} taskcontainer={this} />)
             }
             </div>
         );

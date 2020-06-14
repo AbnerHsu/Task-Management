@@ -5,7 +5,7 @@ import { stageMapping } from '../../stageMapping'
 class Stage extends Component {
     constructor({ tasks }) {
         super();
-        this.state = { tasks : tasks.sort((n, v) => n.stageId - v.stageId)};
+        // this.state = { tasks : tasks.sort((n, v) => n.stageId - v.stageId)};
     }
 
     dropcallback = (event) => {
@@ -28,10 +28,10 @@ class Stage extends Component {
     }
 
     render() {
-        console.log('render', this.state.tasks[2].stageId);
         let stages = {};
-        this.state.tasks.forEach((item) => {
-            let id = item.stageId;
+        // this.state.tasks.forEach((item) => {
+        this.props.tasks.forEach((item) => {
+            let id = item.taskGroupid;
             if (!stages[id]) {
                 stages[id] = { id: id, taskList: [] };
             }
@@ -40,7 +40,6 @@ class Stage extends Component {
 
         const lists = [];
         for (let prop in stages) {
-            console.log(stages[prop].taskList);
             lists.push((
                 <div className="dib v-top stage" data-stage={stages[prop].id} onDrop={this.dropcallback} onDragOverCapture={this.dropcallback1} onDragEnter={e => this.dragEnterCallback(stages[prop].id)} >
                     <h1>{stageMapping[stages[prop].id]}</h1>
