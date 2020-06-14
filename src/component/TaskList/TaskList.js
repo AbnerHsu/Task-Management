@@ -3,21 +3,18 @@ import Task from '../Task/Task';
 
 class TaskList extends Component
 {
-    constructor({tasks}){
+    constructor({tasks, callback, stage}){
         super();
         this.state = { "tasks" : tasks};
-    }
-
-    dragEndCallback(event, id) {
-        let final = this.state.tasks.filter(n => n.id !== id);
-        this.setState({ "tasks" : final });
+        this.callback = callback;
+        this.stage = stage;
     }
 
     render() {
         return (
             <div className="taskList br3 v-top">
             { 
-                this.state.tasks.map((task) => <Task key={task.id} taskName={task.name} taskId={task.id} taskcontainer={this} />)
+                this.props.tasks.map((task) => <Task key={task.id} taskName={task.name} taskId={task.id} taskcontainer={this} />)
             }
             </div>
         );
