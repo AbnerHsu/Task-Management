@@ -38,9 +38,9 @@ class App extends Component {
     for (let g of group.sort(sort)) {
       let tasks = this.props.tasks.filter(n => n.taskGroupid === g.id);
       lists.push((
-        <div key={g.id} className="dib v-top stage" data-stage={g.id} onDrop={this.dropcallback} onDragEnter={e => this.props.onDragEnter(g.id)} >
+        <div key={g.id} className="dib v-top stage fl w-third" data-stage={g.id} onDrop={this.dropcallback} onDragEnter={e => this.props.onDragEnter(g.id)} >
           <h1>{ g.name }</h1>
-          <TaskList tasksList={tasks}
+          <TaskList className="fl w-100" tasksList={tasks}
             start={this.props.onDragStart}
             end={this.props.onDragEnd}
             callback={this.props.onDragEnd} />
@@ -49,7 +49,7 @@ class App extends Component {
     }
 
     return (
-      <div className="App">
+      <div className="App fl w-70">
         {lists}
       </div>
     );

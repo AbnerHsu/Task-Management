@@ -9,7 +9,7 @@ const TaskList = (props) => {
             end={props.end} />);
 
     return (
-        <div className="taskList br3 v-top">
+        <div className="taskList br3 v-top fl w-100">
             {tasks}
         </div>
     );
