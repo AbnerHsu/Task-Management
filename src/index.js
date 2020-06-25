@@ -9,7 +9,8 @@ import * as serviceWorker from './serviceWorker';
 import 'tachyons';
 import { requestTasks  } from './App.reducer';
 
-const store = createStore(requestTasks, applyMiddleware(thunkMiddleware));
+const reducers = requestTasks;
+const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(
     <Provider store={store}>

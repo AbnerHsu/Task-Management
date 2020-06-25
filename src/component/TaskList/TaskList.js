@@ -1,24 +1,18 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Task from '../Task/Task';
 
-class TaskList extends Component
-{
-    constructor({tasks, callback, stage}){
-        super();
-        this.state = { "tasks" : tasks};
-        this.callback = callback;
-        this.stage = stage;
-    }
+const TaskList = (props) => {
+    var tasks = props.tasksList.map((task) =>
+        <Task key={task.id}
+            info={task}
+            start={props.start}
+            end={props.end} />);
 
-    render() {
-        return (
-            <div className="taskList br3 v-top">
-            { 
-                this.props.tasks.map((task) => <Task key={task.id} taskName={task.title} taskId={task.id} taskcontainer={this} />)
-            }
-            </div>
-        );
-    }
-} 
+    return (
+        <div className="taskList br3 v-top">
+            {tasks}
+        </div>
+    );
+};
 
 export default TaskList;

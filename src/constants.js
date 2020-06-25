@@ -1,3 +1,6 @@
 export const REQUEST_PENDING = 'REQUEST_PENDING';
 export const REQUEST_SUCCESS = 'REQUEST_SUCCESS';
 export const REQUEST_FAILED = 'REQUEST_FAILED';
+export const DRAG_START = 'DRAG_START';
+export const DRAG_ENTER = 'DRAG_ENTER';
+export const DRAG_END = 'DRAG_END';
