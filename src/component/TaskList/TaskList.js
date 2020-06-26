@@ -6,7 +6,9 @@ const TaskList = (props) => {
         <Task key={task.id}
             info={task}
             start={props.start}
-            end={props.end} />);
+            end={props.end}
+            />);
+    tasks.push(<Task add={props.add} status={props.status} />);
 
     return (
         <div className="taskList br3 v-top fl w-100">

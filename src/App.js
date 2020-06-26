@@ -2,18 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
 import TaskList  from './component/TaskList/TaskList';
-import { stageMapping } from './stageMapping';
 
-import { requestTasks, startDragTask, finishDragTask, dragTaskEnter } from './App.action';
+import { requestTasks, startDragTask, finishDragTask, dragTaskEnter, addTask } from './App.action';
 
 const mapStateToProps = state => {
   return {
-    tasks: state.tasks
+    tasks: state.tasks,
+    status: state.status
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onAddTask: (taskTitle, status) => dispatch(addTask(taskTitle, status)),
     onRequestTasks: () => dispatch(requestTasks()),
     onDragEnter: (id) => dispatch(dragTaskEnter(id)),
     onDragStart: (id) => dispatch(startDragTask(id)),
@@ -27,23 +28,19 @@ class App extends Component {
   }
 
   render() {
-    const reducer = (acc, current) => acc.findIndex((item) => item.id === current.taskGroupid) < 0 
-      ? acc.concat([{ id: current.taskGroupid, name:stageMapping[current.taskGroupid] }]) : acc;
-
-    let group = this.props.tasks.reduce(reducer, []);
-
-    let sort = (item1, item2) => (item1.id >= item2.id) ? 1 : -1;
-
     const lists = [];
-    for (let g of group.sort(sort)) {
-      let tasks = this.props.tasks.filter(n => n.taskGroupid === g.id);
+    for (let status of this.props.status){ 
+      let statusId = status.id;
+      let tasks = this.props.tasks.filter(n => n.statusId === statusId);
       lists.push((
-        <div key={g.id} className="dib v-top stage fl w-third" data-stage={g.id} onDrop={this.dropcallback} onDragEnter={e => this.props.onDragEnter(g.id)} >
-          <h1>{ g.name }</h1>
+        <div key={statusId} className="dib v-top stage fl w-third" onDrop={this.dropcallback} onDragEnter={e => this.props.onDragEnter(statusId)} >
+          <h1>{ status.name }</h1>
           <TaskList className="fl w-100" tasksList={tasks}
+            status={statusId}
             start={this.props.onDragStart}
             end={this.props.onDragEnd}
-            callback={this.props.onDragEnd} />
+            callback={this.props.onDragEnd}
+            add={this.props.onAddTask} />
         </div>
       ));
     }
