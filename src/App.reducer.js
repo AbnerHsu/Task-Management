@@ -1,9 +1,10 @@
 import {
     REQUEST_PENDING, REQUEST_SUCCESS, REQUEST_FAILED,
-    DRAG_START, DRAG_END, DRAG_ENTER, 
+    DRAG_START, DRAG_END, DRAG_ENTER,
     STATUS_REQUEST_SUCCESS,
     ADD_TASK_REQUEST_SUCCESS
 } from './constants.js'
+import { apiServer } from './config';
 
 const initState = {
     status: [],
@@ -12,7 +13,7 @@ const initState = {
     error: ''
 }
 
-export const requestTasks = (state=initState, action={}) => {
+export const requestTasks = (state = initState, action = {}) => {
     switch (action.type) {
         case DRAG_START:
             return Object.assign({}, state, { dragTask: action.payload });
@@ -22,8 +23,17 @@ export const requestTasks = (state=initState, action={}) => {
             console.log(DRAG_END, state);
             // return state;
             var newTasks = state.tasks.map(item => {
-                if (item.id === state.dragTask && item.statusId !== state.changeTo){
-                    return Object.assign({}, item, { statusId : state.changeTo });
+                if (item.id === state.dragTask && item.statusId !== state.changeTo) {
+                    var postData = { statusId: state.changeTo};
+                    let requestObj = {
+                        body: JSON.stringify(postData),
+                        method: 'PATCH',
+                        cache: 'no-cache',
+                        headers: { 'content-type': 'application/json' }
+                        
+                    };
+                    fetch(apiServer + '/task/' + state.dragTask, requestObj).catch(err => console.log(err));
+                    return Object.assign({}, item, { statusId: state.changeTo });
                 }
                 return item;
             });
@@ -35,8 +45,7 @@ export const requestTasks = (state=initState, action={}) => {
         case STATUS_REQUEST_SUCCESS:
             return Object.assign({}, state, { status: action.payload });
         case ADD_TASK_REQUEST_SUCCESS:
-            if (action.payload)
-            {
+            if (action.payload) {
                 let newTasks = state.tasks.slice();
                 newTasks.push(action.payload);
                 return Object.assign({}, state, { tasks: newTasks });
