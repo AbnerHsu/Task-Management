@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import './App.css';
 import TaskList  from './component/TaskList/TaskList';
 
-import { requestTasks, startDragTask, finishDragTask, dragTaskEnter, addTask } from './App.action';
+import { requestTasks, startDragTask, finishDragTask, dragTaskEnter, addTask, changeTaskTitle } from './App.action';
 
 const mapStateToProps = state => {
   return {
@@ -18,7 +18,8 @@ const mapDispatchToProps = (dispatch) => {
     onRequestTasks: () => dispatch(requestTasks()),
     onDragEnter: (id) => dispatch(dragTaskEnter(id)),
     onDragStart: (id) => dispatch(startDragTask(id)),
-    onDragEnd:() => dispatch(finishDragTask())
+    onDragEnd:() => dispatch(finishDragTask()),
+    onChangeTaskTitle: (id, title) => dispatch(changeTaskTitle(id, title))
   }
 };
 
@@ -40,7 +41,8 @@ class App extends Component {
             start={this.props.onDragStart}
             end={this.props.onDragEnd}
             callback={this.props.onDragEnd}
-            add={this.props.onAddTask} />
+            add={this.props.onAddTask}
+            changeTastTitle = {this.props.onChangeTaskTitle} />
         </div>
       ));
     }

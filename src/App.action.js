@@ -6,7 +6,8 @@ import {
     ADD_TASK_REQUEST_SUCCESS,
     DRAG_START,
     DRAG_ENTER,
-    DRAG_END
+    DRAG_END,
+    CHANGE_TASK_TITLE
 } from './constants';
 import { apiServer } from './config';
 
@@ -51,3 +52,7 @@ export const finishDragTask = () => {
 };
 
 export const dragTaskEnter = (id) => ({ type: DRAG_ENTER, payload: id });
+
+export const changeTaskTitle = (id, title) => {
+    return { type: CHANGE_TASK_TITLE, payload: { 'id':id, 'title':title } };
+}

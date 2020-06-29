@@ -2,7 +2,8 @@ import {
     REQUEST_PENDING, REQUEST_SUCCESS, REQUEST_FAILED,
     DRAG_START, DRAG_END, DRAG_ENTER,
     STATUS_REQUEST_SUCCESS,
-    ADD_TASK_REQUEST_SUCCESS
+    ADD_TASK_REQUEST_SUCCESS,
+    CHANGE_TASK_TITLE
 } from './constants.js'
 import { apiServer } from './config';
 
@@ -14,6 +15,7 @@ const initState = {
 }
 
 export const requestTasks = (state = initState, action = {}) => {
+    let newTasks;
     switch (action.type) {
         case DRAG_START:
             return Object.assign({}, state, { dragTask: action.payload });
@@ -22,7 +24,7 @@ export const requestTasks = (state = initState, action = {}) => {
         case DRAG_END:
             console.log(DRAG_END, state);
             // return state;
-            var newTasks = state.tasks.map(item => {
+            newTasks = state.tasks.map(item => {
                 if (item.id === state.dragTask && item.statusId !== state.changeTo) {
                     var postData = { statusId: state.changeTo};
                     let requestObj = {
@@ -34,6 +36,23 @@ export const requestTasks = (state = initState, action = {}) => {
                     };
                     fetch(apiServer + '/task/' + state.dragTask, requestObj).catch(err => console.log(err));
                     return Object.assign({}, item, { statusId: state.changeTo });
+                }
+                return item;
+            });
+            return Object.assign({}, state, { tasks: newTasks, changeTo: undefined, dragTask: undefined });
+        case CHANGE_TASK_TITLE:
+            newTasks = state.tasks.map(item => {
+                if (item.id === action.payload.id && item.title !== action.payload.title) {
+                    var postData = { title: action.payload.title};
+                    let requestObj = {
+                        body: JSON.stringify(postData),
+                        method: 'PATCH',
+                        cache: 'no-cache',
+                        headers: { 'content-type': 'application/json' }
+                        
+                    };
+                    fetch(apiServer + '/task/' + item.id, requestObj).catch(err => console.log(err));
+                    return Object.assign({}, item, { title: action.payload.title });
                 }
                 return item;
             });
