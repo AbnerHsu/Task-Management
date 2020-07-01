@@ -1,40 +1,39 @@
 import React, { Component } from 'react';
+import InputText from '../InputText/InputText';
 
 class Task extends Component {
     constructor({ info, status, start, end, changeTaskTitle }) {
         super();
         let name = (info) ? info.title : '';
         let id = (info) ? info.id : '';
-        this.state = { isEditMode: false, "name": name, "id": id, "status": status, "start": start, "end": end, changeTitle: changeTaskTitle, "oldValue": name };
+        this.state = { isEditMode: false, "name": name, "id": id, "status": status, "start": start, "end": end, changeTitle: changeTaskTitle };
     }
 
     changeMode() {
         this.setState({ isEditMode: !this.state.isEditMode });
     }
 
-    changeTitle() {
-        const {oldValue, name} = this.state;
-        debugger;
-        if (oldValue !== name ) {
-            this.setState({ "oldValue": name });
-            this.state.changeTitle(this.state.id, name);
-        }
-        this.changeMode();
+    changeTitle(v) {
+        this.state.changeTitle(this.state.id, v);
+        this.setState({name: v});
     }
 
-    changeInput(e) {
-        this.setState({ name: e.target.value });
+    finishEditingTaskTitle(v) {
+        if(v) {
+            this.changeTitle(v);
+        }
+        this.changeMode();
     }
 
     render() {
         const { id, name, isEditMode, status, start, end } = this.state;
         let content = (isEditMode) ?
             (<span>
-                <input 
-                className="bb br2 b--black-10" type="text" value={name} 
-                onChange={e => this.changeInput(e)} 
-                onBlur={(e) => this.changeTitle()} 
-                autoFocus />
+                <InputText 
+                    className="bb br2 b--black-10" 
+                    onFinishInput={(v) => this.finishEditingTaskTitle(v)}
+                    autoFocus={true}
+                    defaultValue={name} />
             </span>)
             : <span onDoubleClick={(e) => this.changeMode()} >{name}</span>
 
@@ -47,7 +46,14 @@ class Task extends Component {
             </div>
         ) : (
                 <div className="br3 pa3 ma2 grow bw1 shadow-5 v-top b--dashed b--black-10">
-                    <h2><input type="text" placeholder="Task title" className="bb br2 b--black-10" onBlur={e => { this.props.add(e.target.value, status); e.target.value = ''; }} /></h2>
+                    <h2>
+                        <InputText 
+                            placeholder="task title" 
+                            classValue="bb br2 b--black-10" 
+                            isReset={true}
+                            onFinishInput={(v) => this.props.add(v, status)}
+                            />
+                    </h2>
                     <p></p>
                 </div>
             );
