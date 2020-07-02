@@ -53,6 +53,19 @@ export const finishDragTask = () => {
 
 export const dragTaskEnter = (id) => ({ type: DRAG_ENTER, payload: id });
 
-export const changeTaskTitle = (id, title) => {
-    return { type: CHANGE_TASK_TITLE, payload: { 'id':id, 'title':title } };
-}
+export const changeTaskTitle = (id, title) => (dispatch) => {
+    var postData = { title: title };
+    let requestObj = {
+        body: JSON.stringify(postData),
+        method: 'PATCH',
+        cache: 'no-cache',
+        headers: { 'content-type': 'application/json' }
+    };
+    fetch(apiServer + '/task/' + id, requestObj)
+        .then(response => {
+            if (response.status >= 200 && response < 300) {
+                dispatch({ type: CHANGE_TASK_TITLE, payload: { 'id': id, 'title': title } });
+            }
+        })
+        .catch(err => console.log(err));
+};

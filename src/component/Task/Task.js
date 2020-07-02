@@ -4,23 +4,24 @@ import InputText from '../InputText/InputText';
 class Task extends Component {
     constructor({ info, status, start, end, changeTaskTitle }) {
         super();
-        let name = (info) ? info.title : '';
-        let id = (info) ? info.id : '';
-        this.state = { isEditMode: false, "name": name, "id": id, "status": status, "start": start, "end": end, changeTitle: changeTaskTitle };
+        let { title, id } = (info || { title: '', id: '' });
+        this.state = { isEditMode: false, name: title, id: id, status: status, start: start, end: end, changeTitle: changeTaskTitle };
     }
 
     changeMode() {
-        this.setState({ isEditMode: !this.state.isEditMode });
+        let { isEditMode } = this.state;
+        this.setState({ isEditMode: !isEditMode });
     }
 
-    changeTitle(v) {
-        this.state.changeTitle(this.state.id, v);
-        this.setState({name: v});
+    changeTitle(newTitle) {
+        let { id } =  this.state;
+        this.state.changeTitle(id, newTitle);
+        this.setState({name: newTitle});
     }
 
-    finishEditingTaskTitle(v) {
-        if(v) {
-            this.changeTitle(v);
+    finishEditingTaskTitle(title) {
+        if(title) {
+            this.changeTitle(title);
         }
         this.changeMode();
     }
@@ -38,11 +39,10 @@ class Task extends Component {
             : <span onDoubleClick={(e) => this.changeMode()} >{name}</span>
 
         return (id) ? (
-            <div className="br3 pa3 ma2 grow bw2 shadow-5 v-top" draggable="true" onDragStart={e => start(id)} onDragEnd={e => end()} >
+            <div className="br3 pa3 ma2 grow bw2 shadow-5 v-top task" draggable="true" onDragStart={e => start(id)} onDragEnd={e => end()} >
                 <h2>
                     {content}
                 </h2>
-                <p></p>
             </div>
         ) : (
                 <div className="br3 pa3 ma2 grow bw1 shadow-5 v-top b--dashed b--black-10">
@@ -54,7 +54,6 @@ class Task extends Component {
                             onFinishInput={(v) => this.props.add(v, status)}
                             />
                     </h2>
-                    <p></p>
                 </div>
             );
     }

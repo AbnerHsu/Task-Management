@@ -22,8 +22,6 @@ export const requestTasks = (state = initState, action = {}) => {
         case DRAG_ENTER:
             return Object.assign({}, state, { changeTo: action.payload });
         case DRAG_END:
-            console.log(DRAG_END, state);
-            // return state;
             newTasks = state.tasks.map(item => {
                 if (item.id === state.dragTask && item.statusId !== state.changeTo) {
                     var postData = { statusId: state.changeTo};
@@ -41,21 +39,9 @@ export const requestTasks = (state = initState, action = {}) => {
             });
             return Object.assign({}, state, { tasks: newTasks, changeTo: undefined, dragTask: undefined });
         case CHANGE_TASK_TITLE:
-            newTasks = state.tasks.map(item => {
-                if (item.id === action.payload.id && item.title !== action.payload.title) {
-                    var postData = { title: action.payload.title};
-                    let requestObj = {
-                        body: JSON.stringify(postData),
-                        method: 'PATCH',
-                        cache: 'no-cache',
-                        headers: { 'content-type': 'application/json' }
-                        
-                    };
-                    fetch(apiServer + '/task/' + item.id, requestObj).catch(err => console.log(err));
-                    return Object.assign({}, item, { title: action.payload.title });
-                }
-                return item;
-            });
+            newTasks = state.tasks.map(item => (item.id === action.payload.id && item.title !== action.payload.title) 
+                ? Object.assign({}, item, { title: action.payload.title }) 
+                : item);
             return Object.assign({}, state, { tasks: newTasks, changeTo: undefined, dragTask: undefined });
         case REQUEST_SUCCESS:
             return Object.assign({}, state, { tasks: action.payload });
